@@ -2,7 +2,7 @@
  * Filter creation and TFS data generation
  */
 
-import { FlightDataImpl, TFSDataImpl } from './flight-data';
+import { FlightDataImpl, TFSDataImpl, PassengersImpl } from './flight-data';
 import { FlightData, Passengers, TripType, SeatType } from './types';
 
 export function createFilter(params: {

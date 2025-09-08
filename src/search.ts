@@ -12,10 +12,13 @@ export function searchAirport(query: string): Airport[] {
    * @returns A list of airports matching the query
    */
   const results: Airport[] = [];
-  const queryLower = query.toLowerCase();
+  const queryLower = query.toLowerCase().replace(/\s+/g, '_');
   
   for (const [name, code] of Object.entries(Airport)) {
-    if (name.toLowerCase().includes(queryLower)) {
+    const nameLower = name.toLowerCase();
+    if (nameLower.includes(queryLower) || 
+        nameLower.includes(query.toLowerCase().replace(/\s+/g, '')) ||
+        code.toLowerCase().includes(query.toLowerCase())) {
       results.push(code as Airport);
     }
   }

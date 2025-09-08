@@ -14,7 +14,7 @@ import { ItinerarySummaryImpl } from './flight-data';
 
 type NLBaseType = number | string | null | NLBaseType[];
 
-class NLData {
+export class NLData {
   constructor(public data: NLBaseType[]) {}
 
   get(decodePath: number | number[]): NLBaseType {
