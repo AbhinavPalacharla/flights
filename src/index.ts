@@ -19,6 +19,12 @@ export { createFilter } from './filter';
 export { searchAirport } from './search';
 export { getFlightsFromFilter, getFlights } from './core';
 
+// Export HTTP clients and fallback methods
+export { HttpClient, HttpResponse, client } from './http-client';
+export { BrightDataClient, brightDataFetch } from './bright-data';
+export { LocalPlaywrightClient, localPlaywrightFetch } from './local-playwright';
+export { FallbackPlaywrightClient, fallbackPlaywrightFetch } from './fallback-playwright';
+
 // Re-export specific types for convenience
 export type {
   TripType,

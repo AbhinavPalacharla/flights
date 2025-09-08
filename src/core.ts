@@ -8,6 +8,10 @@ import { TFSDataImpl } from './flight-data';
 import { Result, DecodedResult, DataSource, FetchMode } from './types';
 import { createInfoProto, serializeToBase64, loadProtobufDefinitions } from './protobuf';
 import { ResultDecoder } from './decoder';
+import { brightDataFetch } from './bright-data';
+import { localPlaywrightFetch } from './local-playwright';
+import { fallbackPlaywrightFetch } from './fallback-playwright';
+import { HttpResponse } from './http-client';
 
 // Initialize protobuf definitions
 let protobufInitialized = false;
@@ -68,31 +72,26 @@ export async function getFlightsFromFilter(
     curr: currency,
   };
 
-  let response: AxiosResponse;
+  let response: AxiosResponse | HttpResponse;
 
   try {
-    if (mode === 'common' || mode === 'fallback') {
+    if (mode === 'common') {
+      response = await fetch(params);
+    } else if (mode === 'fallback') {
       try {
         response = await fetch(params);
       } catch (error) {
-        if (mode === 'fallback') {
-          // For now, just re-throw the error
-          // In a full implementation, this would use Playwright fallback
-          throw error;
-        } else {
-          throw error;
-        }
+        // Try fallback Playwright
+        response = await fallbackPlaywrightFetch(params);
       }
+    } else if (mode === 'force-fallback') {
+      response = await fallbackPlaywrightFetch(params);
     } else if (mode === 'local') {
-      // For now, just use regular fetch
-      // In a full implementation, this would use local Playwright
-      response = await fetch(params);
+      response = await localPlaywrightFetch(params);
     } else if (mode === 'bright-data') {
-      // For now, just use regular fetch
-      // In a full implementation, this would use Bright Data API
-      response = await fetch(params);
+      response = await brightDataFetch(params);
     } else {
-      // force-fallback
+      // Default to common
       response = await fetch(params);
     }
   } catch (error) {
@@ -137,7 +136,7 @@ export async function getFlights(params: {
 }
 
 export function parseResponse(
-  response: AxiosResponse,
+  response: AxiosResponse | HttpResponse,
   dataSource: DataSource,
   options: {
     dangerously_allow_looping_last_item?: boolean;
