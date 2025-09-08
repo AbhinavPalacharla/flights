@@ -6,8 +6,8 @@ import { Airport, FlightData, Passengers, createFilter, searchAirport } from '..
 
 describe('Type Definitions', () => {
   test('Airport enum should contain expected airports', () => {
-    expect(Airport.TAIPEI_TAOYUAN_INTERNATIONAL_AIRPORT).toBe('TPE');
-    expect(Airport.NEW_YORK_JOHN_F_KENNEDY_INTERNATIONAL_AIRPORT).toBe('JFK');
+    expect(Airport.TAIWAN_TAOYUAN_INTERNATIONAL_AIRPORT).toBe('TPE');
+    expect(Airport.JOHN_F_KENNEDY_INTERNATIONAL_AIRPORT).toBe('JFK');
     expect(Airport.LOS_ANGELES_INTERNATIONAL_AIRPORT).toBe('LAX');
   });
 
@@ -26,8 +26,8 @@ describe('Type Definitions', () => {
   test('FlightData should work with Airport enum', () => {
     const flightData = new FlightData({
       date: '2025-01-01',
-      from_airport: Airport.TAIPEI_TAOYUAN_INTERNATIONAL_AIRPORT,
-      to_airport: Airport.NEW_YORK_JOHN_F_KENNEDY_INTERNATIONAL_AIRPORT
+      from_airport: Airport.TAIWAN_TAOYUAN_INTERNATIONAL_AIRPORT,
+      to_airport: Airport.JOHN_F_KENNEDY_INTERNATIONAL_AIRPORT
     });
 
     expect(flightData.from_airport).toBe('TPE');
@@ -130,7 +130,10 @@ describe('Filter Creation', () => {
 describe('Airport Search', () => {
   test('searchAirport should find airports by name', () => {
     const results = searchAirport('taipei');
-    expect(results).toContain(Airport.TAIPEI_TAOYUAN_INTERNATIONAL_AIRPORT);
+    expect(results.some(r => r.code === 'TSA')).toBe(true);
+    
+    const taoyuanResults = searchAirport('taoyuan');
+    expect(taoyuanResults.some(r => r.code === 'TPE')).toBe(true);
   });
 
   test('searchAirport should be case insensitive', () => {

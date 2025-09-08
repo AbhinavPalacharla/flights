@@ -25,8 +25,8 @@ describe('Integration Tests', () => {
     // Create flight data
     const flightData = new FlightData({
       date: '2025-01-01',
-      from_airport: Airport.TAIPEI_TAOYUAN_INTERNATIONAL_AIRPORT,
-      to_airport: Airport.NEW_YORK_JOHN_F_KENNEDY_INTERNATIONAL_AIRPORT
+      from_airport: Airport.TAIWAN_TAOYUAN_INTERNATIONAL_AIRPORT,
+      to_airport: Airport.JOHN_F_KENNEDY_INTERNATIONAL_AIRPORT
     });
 
     // Create passengers
@@ -160,11 +160,14 @@ describe('Integration Tests', () => {
 
   test('should search airports correctly', () => {
     const taipeiResults = searchAirport('taipei');
-    expect(taipeiResults).toContain(Airport.TAIPEI_TAOYUAN_INTERNATIONAL_AIRPORT);
+    expect(taipeiResults.some(r => r.code === 'TSA')).toBe(true);
+    
+    const taoyuanResults = searchAirport('taoyuan');
+    expect(taoyuanResults.some(r => r.code === 'TPE')).toBe(true);
 
-    const newYorkResults = searchAirport('new york');
-    expect(newYorkResults.length).toBeGreaterThan(0);
-    expect(newYorkResults).toContain(Airport.NEW_YORK_JOHN_F_KENNEDY_INTERNATIONAL_AIRPORT);
+    const kennedyResults = searchAirport('kennedy');
+    expect(kennedyResults.length).toBeGreaterThan(0);
+    expect(kennedyResults.some(r => r.code === 'JFK')).toBe(true);
 
     const emptyResults = searchAirport('nonexistent');
     expect(emptyResults).toEqual([]);

@@ -23,10 +23,9 @@ export class LocalPlaywrightClient {
         });
       }
 
-      const page = await this.browser.newPage();
-      
-      // Set user agent
-      await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36');
+      const page = await this.browser.newPage({
+        userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36'
+      });
       
       // Navigate to the URL
       await page.goto(url, { waitUntil: 'networkidle' });
@@ -52,8 +51,8 @@ export class LocalPlaywrightClient {
 
       // Extract the main content
       const body = await page.evaluate(() => {
-        const mainElement = document.querySelector('[role="main"]');
-        return mainElement ? mainElement.innerHTML : document.body.innerHTML;
+        const mainElement = (document as any).querySelector('[role="main"]');
+        return mainElement ? mainElement.innerHTML : (document as any).body.innerHTML;
       });
 
       await page.close();

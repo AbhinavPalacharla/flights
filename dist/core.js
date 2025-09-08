@@ -48,6 +48,9 @@ const cheerio = __importStar(require("cheerio"));
 const flight_data_1 = require("./flight-data");
 const protobuf_1 = require("./protobuf");
 const decoder_1 = require("./decoder");
+const bright_data_1 = require("./bright-data");
+const local_playwright_1 = require("./local-playwright");
+const fallback_playwright_1 = require("./fallback-playwright");
 // Initialize protobuf definitions
 let protobufInitialized = false;
 async function ensureProtobufInitialized() {
@@ -86,33 +89,29 @@ async function getFlightsFromFilter(filter, currency = '', options = {}) {
     };
     let response;
     try {
-        if (mode === 'common' || mode === 'fallback') {
+        if (mode === 'common') {
+            response = await fetch(params);
+        }
+        else if (mode === 'fallback') {
             try {
                 response = await fetch(params);
             }
             catch (error) {
-                if (mode === 'fallback') {
-                    // For now, just re-throw the error
-                    // In a full implementation, this would use Playwright fallback
-                    throw error;
-                }
-                else {
-                    throw error;
-                }
+                // Try fallback Playwright
+                response = await (0, fallback_playwright_1.fallbackPlaywrightFetch)(params);
             }
         }
+        else if (mode === 'force-fallback') {
+            response = await (0, fallback_playwright_1.fallbackPlaywrightFetch)(params);
+        }
         else if (mode === 'local') {
-            // For now, just use regular fetch
-            // In a full implementation, this would use local Playwright
-            response = await fetch(params);
+            response = await (0, local_playwright_1.localPlaywrightFetch)(params);
         }
         else if (mode === 'bright-data') {
-            // For now, just use regular fetch
-            // In a full implementation, this would use Bright Data API
-            response = await fetch(params);
+            response = await (0, bright_data_1.brightDataFetch)(params);
         }
         else {
-            // force-fallback
+            // Default to common
             response = await fetch(params);
         }
     }

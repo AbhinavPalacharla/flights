@@ -17,7 +17,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getFlights = exports.getFlightsFromFilter = exports.searchAirport = exports.createFilter = exports.Airport = exports.Cookies = exports.TFSData = exports.Passengers = exports.FlightData = void 0;
+exports.fallbackPlaywrightFetch = exports.FallbackPlaywrightClient = exports.localPlaywrightFetch = exports.LocalPlaywrightClient = exports.brightDataFetch = exports.BrightDataClient = exports.client = exports.HttpResponse = exports.HttpClient = exports.getFlights = exports.getFlightsFromFilter = exports.searchAirport = exports.createFilter = exports.Airport = exports.Cookies = exports.TFSData = exports.Passengers = exports.FlightData = void 0;
 // Export types
 __exportStar(require("./types"), exports);
 // Export classes
@@ -40,4 +40,18 @@ Object.defineProperty(exports, "searchAirport", { enumerable: true, get: functio
 var core_1 = require("./core");
 Object.defineProperty(exports, "getFlightsFromFilter", { enumerable: true, get: function () { return core_1.getFlightsFromFilter; } });
 Object.defineProperty(exports, "getFlights", { enumerable: true, get: function () { return core_1.getFlights; } });
+// Export HTTP clients and fallback methods
+var http_client_1 = require("./http-client");
+Object.defineProperty(exports, "HttpClient", { enumerable: true, get: function () { return http_client_1.HttpClient; } });
+Object.defineProperty(exports, "HttpResponse", { enumerable: true, get: function () { return http_client_1.HttpResponse; } });
+Object.defineProperty(exports, "client", { enumerable: true, get: function () { return http_client_1.client; } });
+var bright_data_1 = require("./bright-data");
+Object.defineProperty(exports, "BrightDataClient", { enumerable: true, get: function () { return bright_data_1.BrightDataClient; } });
+Object.defineProperty(exports, "brightDataFetch", { enumerable: true, get: function () { return bright_data_1.brightDataFetch; } });
+var local_playwright_1 = require("./local-playwright");
+Object.defineProperty(exports, "LocalPlaywrightClient", { enumerable: true, get: function () { return local_playwright_1.LocalPlaywrightClient; } });
+Object.defineProperty(exports, "localPlaywrightFetch", { enumerable: true, get: function () { return local_playwright_1.localPlaywrightFetch; } });
+var fallback_playwright_1 = require("./fallback-playwright");
+Object.defineProperty(exports, "FallbackPlaywrightClient", { enumerable: true, get: function () { return fallback_playwright_1.FallbackPlaywrightClient; } });
+Object.defineProperty(exports, "fallbackPlaywrightFetch", { enumerable: true, get: function () { return fallback_playwright_1.fallbackPlaywrightFetch; } });
 //# sourceMappingURL=index.js.map
