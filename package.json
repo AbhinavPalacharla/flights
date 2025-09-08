@@ -1,0 +1,45 @@
+{
+  "name": "fast-flights-ts",
+  "version": "1.0.0",
+  "description": "The fast and strongly-typed Google Flights scraper (API) implemented in TypeScript. Based on Base64-encoded Protobuf string.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "flights",
+    "google",
+    "google-flights",
+    "scraper",
+    "protobuf",
+    "travel",
+    "trip",
+    "passengers",
+    "airport",
+    "typescript"
+  ],
+  "author": "AWeirdDev",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.0",
+    "cheerio": "^1.0.0-rc.12",
+    "protobufjs": "^7.2.5"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.0",
+    "@types/node": "^20.0.0",
+    "jest": "^29.5.0",
+    "ts-jest": "^29.1.0",
+    "typescript": "^5.0.0"
+  },
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "LICENSE"
+  ]
+}
