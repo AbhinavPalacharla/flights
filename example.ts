@@ -30,8 +30,8 @@ async function main() {
   console.log('2. Creating flight data:');
   const flightData = new FlightData({
     date: '2025-01-01',
-    from_airport: Airport.TAIPEI_TAOYUAN_INTERNATIONAL_AIRPORT,
-    to_airport: Airport.NEW_YORK_JOHN_F_KENNEDY_INTERNATIONAL_AIRPORT
+    from_airport: Airport.TAIWAN_TAOYUAN_INTERNATIONAL_AIRPORT,
+    to_airport: Airport.JOHN_F_KENNEDY_INTERNATIONAL_AIRPORT
   });
   console.log('Flight data:', flightData.toString());
   console.log();

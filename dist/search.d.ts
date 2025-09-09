@@ -1,6 +1,10 @@
 /**
  * Airport search functionality
  */
-import { Airport } from './airports';
-export declare function searchAirport(query: string): Airport[];
+export declare function searchAirport(query: string): Array<{
+    code: string;
+    name: string;
+    city: string;
+    country: string;
+}>;
 //# sourceMappingURL=search.d.ts.map

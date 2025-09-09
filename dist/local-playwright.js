@@ -1,0 +1,86 @@
+"use strict";
+/**
+ * Local Playwright integration for flight search
+ * Provides a fallback method using local browser automation
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.LocalPlaywrightClient = void 0;
+exports.localPlaywrightFetch = localPlaywrightFetch;
+const playwright_1 = require("playwright");
+const http_client_1 = require("./http-client");
+class LocalPlaywrightClient {
+    constructor() {
+        this.browser = null;
+    }
+    async fetchFlights(params) {
+        const url = "https://www.google.com/travel/flights?" +
+            Object.entries(params)
+                .map(([k, v]) => `${k}=${encodeURIComponent(v)}`)
+                .join('&');
+        try {
+            if (!this.browser) {
+                this.browser = await playwright_1.chromium.launch({
+                    headless: true,
+                    args: ['--no-sandbox', '--disable-setuid-sandbox']
+                });
+            }
+            const page = await this.browser.newPage({
+                userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36'
+            });
+            // Navigate to the URL
+            await page.goto(url, { waitUntil: 'networkidle' });
+            // Handle consent dialog if present
+            try {
+                const consentButton = page.locator('text="Accept all"');
+                if (await consentButton.isVisible({ timeout: 5000 })) {
+                    await consentButton.click();
+                    await page.waitForTimeout(1000);
+                }
+            }
+            catch (error) {
+                // Consent dialog not found or already handled, continue
+            }
+            // Wait for the main content to load
+            try {
+                await page.locator('.eQ35Ce').waitFor({ timeout: 10000 });
+            }
+            catch (error) {
+                // Fallback: wait for any content
+                await page.waitForTimeout(3000);
+            }
+            // Extract the main content
+            const body = await page.evaluate(() => {
+                const mainElement = document.querySelector('[role="main"]');
+                return mainElement ? mainElement.innerHTML : document.body.innerHTML;
+            });
+            await page.close();
+            return new http_client_1.HttpResponse({
+                status: 200,
+                statusText: 'OK',
+                data: body,
+                headers: {},
+                config: {}
+            });
+        }
+        catch (error) {
+            throw new Error(`Local Playwright request failed: ${error}`);
+        }
+    }
+    async close() {
+        if (this.browser) {
+            await this.browser.close();
+            this.browser = null;
+        }
+    }
+}
+exports.LocalPlaywrightClient = LocalPlaywrightClient;
+async function localPlaywrightFetch(params) {
+    const client = new LocalPlaywrightClient();
+    try {
+        return await client.fetchFlights(params);
+    }
+    finally {
+        await client.close();
+    }
+}
+//# sourceMappingURL=local-playwright.js.map

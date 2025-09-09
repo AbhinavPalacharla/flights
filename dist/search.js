@@ -10,18 +10,8 @@ function searchAirport(query) {
      * Search for airports.
      *
      * @param query - The search query
-     * @returns A list of airports matching the query
+     * @returns A list of airports matching the query with detailed information
      */
-    const results = [];
-    const queryLower = query.toLowerCase().replace(/\s+/g, '_');
-    for (const [name, code] of Object.entries(airports_1.Airport)) {
-        const nameLower = name.toLowerCase();
-        if (nameLower.includes(queryLower) ||
-            nameLower.includes(query.toLowerCase().replace(/\s+/g, '')) ||
-            code.toLowerCase().includes(query.toLowerCase())) {
-            results.push(code);
-        }
-    }
-    return results;
+    return (0, airports_1.searchAirport)(query);
 }
 //# sourceMappingURL=search.js.map
